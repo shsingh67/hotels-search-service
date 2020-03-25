@@ -12,7 +12,6 @@ public class HotelDAO {
     private RedisTemplate<String, String> redisTemplate;
     private HashOperations hashOperations;
 
-
     public static final String KEY = "hotels";
 
     public HotelDAO(RedisTemplate<String, String> redisTemplate) {
