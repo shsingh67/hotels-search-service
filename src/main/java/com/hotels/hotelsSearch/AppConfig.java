@@ -1,17 +1,15 @@
 package com.hotels.hotelsSearch;
 
-import com.hotels.hotelsSearch.models.Hotel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class AppConfig {
@@ -19,10 +17,8 @@ public class AppConfig {
     @Value("${yelp.token}")
     private String yelpToken;
 
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 6379));
-    }
+    @Value("${client.hotels.url}")
+    private String clientHotelsUrl;
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
@@ -46,6 +42,18 @@ public class AppConfig {
     public HttpEntity<String> getHttpEntity() {
         HttpEntity<String> entity = new HttpEntity<>(addHeaders());
         return entity;
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/hotels").allowedOrigins(clientHotelsUrl);
+            }
+
+        };
+
     }
 
 }
