@@ -1,6 +1,5 @@
 package com.hotels.hotelsSearch.controllers;
 
-import com.hotels.hotelsSearch.models.Hotel;
 import com.hotels.hotelsSearch.service.SearchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ public class SearchController {
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    @CrossOrigin(origins="http://localhost:3000")
     public ResponseEntity retrieveHotels(
             @RequestParam(value="location", required = false) String location) {
 
